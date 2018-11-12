@@ -42,7 +42,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
         holder.textViewTitle.setText(book.getVolumeInfo().getTitle());
         String price;
-        if (book.getSaleInfo().getSaleability() == "FOR_SALE"){
+        if (book.getSaleInfo().getSaleability().equals("FOR_SALE")){
             price = book.getSaleInfo().getListPrice().getAmount() + book.getSaleInfo().getListPrice().getCurrencyCode();
         }
         else{
