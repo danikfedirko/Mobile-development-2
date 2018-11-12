@@ -1,4 +1,4 @@
-package com.example.danik.google_books_application;
+package com.example.danik.google_books_application.Server;
 
 import com.example.danik.google_books_application.Entities.Responce;
 
