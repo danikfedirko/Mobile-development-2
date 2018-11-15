@@ -1,6 +1,8 @@
 package com.example.danik.google_books_application.Adapters;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.danik.google_books_application.Entities.Item;
 import com.example.danik.google_books_application.R;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,24 +25,34 @@ import butterknife.ButterKnife;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     private List<Item> books;
+    private Context mContext;
+    private OnItemClickListener listener;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).
+        View view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.list_item, parent, false);
-        return new ViewHolder(v);
+
+        mContext = parent.getContext();
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
     }
 
-    public void setProducts(List<Item> books) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setBooks(List<Item> books) {
         this.books = books;
     }
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        Glide.with(mContext);
         final Item book = books.get(position);
 
-        holder.textViewTitle.setText(book.getVolumeInfo().getTitle());
+        viewHolder.textViewTitle.setText(book.getVolumeInfo().getTitle());
         String price;
         if (book.getSaleInfo().getSaleability().equals("FOR_SALE")){
             price = book.getSaleInfo().getListPrice().getAmount() + book.getSaleInfo().getListPrice().getCurrencyCode();
@@ -48,16 +60,25 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         else{
             price = "not for sale";
         }
-        holder.textViewPrice.setText(price);
+        viewHolder.textViewPrice.setText(price);
 
-        Picasso.get().load(book.getVolumeInfo().getImageLinks().getThumbnail()).fit().into(holder.imageView);
+        Picasso.get().load(book.getVolumeInfo().getImageLinks().getThumbnail()).fit().into(viewHolder.imageView);
 
+        viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(book);
+            }
+        });
     }
 
 
     @Override
     public int getItemCount() {
-        return books.size();
+        if (books != null){
+            return books.size();
+        }
+        else return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
