@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.example.danik.google_books_application.Fragments.FavoritesFragment;
 import com.example.danik.google_books_application.R;
@@ -18,8 +18,6 @@ import com.example.danik.google_books_application.Fragments.ListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.fragment_container)
-    protected FrameLayout frameLayout;
     @BindView(R.id.navigation_menu)
     protected BottomNavigationView bottomNavigation;
 
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
-        setFragment(new ListFragment());
+        setFragment(new ListFragment(), true);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener=
@@ -47,16 +45,22 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment=new FavoritesFragment();
                             break;
                     }
-                    setFragment(selectedFragment);
+                    setFragment(selectedFragment, false);
                     return true;
                 }
             };
 
-    public void setFragment(final Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    public void setFragment(final Fragment fragment, final boolean addToBackStack) {
+        getSupportFragmentManager().beginTransaction();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
+
     }
 
 }

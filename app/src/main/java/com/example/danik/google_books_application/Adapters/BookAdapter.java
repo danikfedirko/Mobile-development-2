@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.danik.google_books_application.Entities.Item;
 import com.example.danik.google_books_application.R;
 import com.squareup.picasso.Picasso;
@@ -25,7 +24,6 @@ import butterknife.ButterKnife;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     private List<Item> books;
-    private Context mContext;
     private OnItemClickListener listener;
 
     @Override
@@ -33,7 +31,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         View view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.list_item, parent, false);
 
-        mContext = parent.getContext();
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -49,7 +46,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Glide.with(mContext);
         final Item book = books.get(position);
 
         viewHolder.textViewTitle.setText(book.getVolumeInfo().getTitle());

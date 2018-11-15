@@ -102,14 +102,13 @@ public class ListFragment extends Fragment {
                     ListItemFragment listItemFragment = new ListItemFragment();
                     listItemFragment.setArguments(bundle);
 
-                    mainActivity.setFragment(listItemFragment);
+                    mainActivity.setFragment(listItemFragment, true);
                 }
             }
         });
         recyclerView.setAdapter(bookAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
 
     private void noData() {
         bookAdapter.setBooks(null);

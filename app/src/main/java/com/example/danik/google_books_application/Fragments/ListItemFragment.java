@@ -48,19 +48,10 @@ public class ListItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_item, container, false);
         ButterKnife.bind(this, view);
-        if(getArguments() != null) {
-            book = (Item) getArguments().getSerializable(Constants.ARG_TITLE);
-            displayCharacter();
-        }
-        if (getActivity() != null) {
-            ButterKnife.bind(this, view);
-
-            preferences = getActivity().getSharedPreferences(Constants.favorites,
-                    Context.MODE_PRIVATE);
-            initRecyclerView();
-            displayItems();
-        }
-
+        book = (Item) getArguments().getSerializable(Constants.ARG_TITLE);
+        displayBook();
+        preferences = getActivity().getSharedPreferences(Constants.FAVOURITES, Context.MODE_PRIVATE);
+        initRecyclerView();
         checkFavorite();
 
         return view;
@@ -99,26 +90,21 @@ public class ListItemFragment extends Fragment {
     }
 
     boolean checkFavorite() {
-        if(!preferences.contains(book.getVolumeInfo().getTitle())) {
-            favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            return false;
-        } else {
+        if(preferences.contains(book.getVolumeInfo().getTitle())) {
             favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
             return true;
+        } else {
+            favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            return false;
         }
     }
 
-    void displayCharacter() {
+    void displayBook() {
         bookTitle.setText(book.getVolumeInfo().getTitle());
         bookDescription.setText(book.getVolumeInfo().getDescription());
         Picasso.get().load(book.getVolumeInfo().getImageLinks().getThumbnail()).into(bookImage);
-
     }
 
-    private void displayItems() {
-
-        adapter.notifyDataSetChanged();
-    }
 
     private void initRecyclerView() {
         adapter = new BookAdapter();

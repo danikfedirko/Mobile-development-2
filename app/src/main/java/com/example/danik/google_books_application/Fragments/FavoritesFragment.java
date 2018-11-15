@@ -53,7 +53,7 @@ public class FavoritesFragment extends Fragment {
     private void getPreferences() {
         SharedPreferences preferences;
         preferences = getActivity().getSharedPreferences(
-                Constants.favorites, Context.MODE_PRIVATE);
+                Constants.FAVOURITES, Context.MODE_PRIVATE);
         Map<String, ?> map = preferences.getAll();
         if(map != null) {
             for (Map.Entry<String, ?> entry : map.entrySet()) {
@@ -80,7 +80,7 @@ public class FavoritesFragment extends Fragment {
                     ListItemFragment listItemFragment = new ListItemFragment();
                     listItemFragment.setArguments(bundle);
 
-                    mainActivity.setFragment(listItemFragment);
+                    mainActivity.setFragment(listItemFragment, true);
                 }
             }
         });
