@@ -16,103 +16,87 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.danik.google_books_application.Adapters.OnItemClickListener;
+
+import com.example.danik.google_books_application.Activities.ApplicationEx;
 import com.example.danik.google_books_application.Adapters.BookAdapter;
-import com.example.danik.google_books_application.Constants;
+import com.example.danik.google_books_application.Adapters.OnItemClickListener;
 import com.example.danik.google_books_application.Entities.Item;
-import com.example.danik.google_books_application.Activities.MainActivity;
-import com.example.danik.google_books_application.Entities.Responce;
+import com.example.danik.google_books_application.MVPInterfaces.BooksListContract;
+import com.example.danik.google_books_application.Presenter.ListPresenter;
 import com.example.danik.google_books_application.R;
-import com.example.danik.google_books_application.Server.BookAPI;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class ListFragment extends Fragment implements BooksListContract.View {
 
-import static com.example.danik.google_books_application.Server.ApiRequest.request;
+    private BookAdapter adapter;
 
-public class ListFragment extends Fragment {
+    private ListPresenter mPresenter;
 
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
-    @BindView(R.id.no_data)
-    protected TextView textNoData;
     @BindView(R.id.pullToRefresh)
-    protected SwipeRefreshLayout pullToRefresh;
-
-    private BookAdapter bookAdapter;
+    protected SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_data)
+    protected TextView noDataTextView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+        mPresenter = new ListPresenter( (ApplicationEx) getContext().getApplicationContext() );
+        mPresenter.attachView(this);
+
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
             initRecyclerView();
 
-            textNoData.setVisibility(View.INVISIBLE);
-            pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            noDataTextView.setVisibility(View.INVISIBLE);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    loadBooks();
-                    pullToRefresh.setRefreshing(false);
+                    mPresenter.loadData();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
         }
-        loadBooks();
+        mPresenter.loadData();
 
         return view;
     }
 
-    private void loadBooks(){
-        BookAPI api = request();
-
-        Call<Responce> call = api.getBooks();
-        call.enqueue(new Callback<Responce>() {
-
-            @Override
-            public void onResponse(Call<Responce> call, Response<Responce> response) {
-                List<Item> books = response.body().getItems();
-
-                textNoData.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                bookAdapter.setBooks(books);
-                recyclerView.setAdapter(bookAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<Responce> call, Throwable t) {
-                recyclerView.setVisibility(View.GONE);
-                textNoData.setVisibility(View.VISIBLE);
-            }
-
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
     }
 
     private void initRecyclerView() {
-        bookAdapter = new BookAdapter();
-        recyclerView.setHasFixedSize(true);
-        bookAdapter.setOnItemClickListener( new OnItemClickListener() {
+        adapter = new BookAdapter();
+        adapter.setOnItemClickListener( new OnItemClickListener() {
+            @Override
             public void onItemClick(Item book) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if(mainActivity != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable( Constants.ARG_TITLE, book);
-
-                    ListItemFragment listItemFragment = new ListItemFragment();
-                    listItemFragment.setArguments(bundle);
-
-                    mainActivity.setFragment(listItemFragment, true);
-                }
+                mPresenter.characterSelected(book);
             }
         });
-        recyclerView.setAdapter(bookAdapter);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void noData() {
-        bookAdapter.setBooks(null);
-        bookAdapter.notifyDataSetChanged();
-        textNoData.setVisibility(View.VISIBLE);
+    public void displayBooks(final List<Item> books) {
+        adapter.setBooks(books);
+        adapter.notifyDataSetChanged();
+        noDataTextView.setVisibility(View.INVISIBLE);
+    }
+
+    public void noData() {
+        adapter.setBooks(null);
+        adapter.notifyDataSetChanged();
+        noDataTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 }

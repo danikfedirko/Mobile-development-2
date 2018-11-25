@@ -1,7 +1,5 @@
 package com.example.danik.google_books_application.Fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,25 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.danik.google_books_application.Activities.ApplicationEx;
 import com.example.danik.google_books_application.Entities.Item;
-import com.google.gson.Gson;
+import com.example.danik.google_books_application.MVPInterfaces.FavoriteBooksContract;
+import com.example.danik.google_books_application.Presenter.FavoritesPresenter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.danik.google_books_application.Adapters.OnItemClickListener;
 import com.example.danik.google_books_application.Adapters.BookAdapter;
-import com.example.danik.google_books_application.Constants;
-import com.example.danik.google_books_application.Activities.MainActivity;
 import com.example.danik.google_books_application.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements FavoriteBooksContract.View {
 
     private BookAdapter adapter;
-    private List<Item> books;
+    private FavoritesPresenter mPresenter;
 
     @BindView(R.id.favorite_recycler_view)
     protected RecyclerView recyclerView;
@@ -39,57 +35,45 @@ public class FavoritesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         ButterKnife.bind(this, view);
-        books = null;
 
         if(getActivity() != null) {
             initRecyclerView();
-
-            getPreferences();
         }
+
+        mPresenter = new FavoritesPresenter( (ApplicationEx) getContext().getApplicationContext() );
+        mPresenter.attachView(this);
 
         return view;
     }
 
-    private void getPreferences() {
-        SharedPreferences preferences;
-        preferences = getActivity().getSharedPreferences(
-                Constants.FAVOURITES, Context.MODE_PRIVATE);
-        Map<String, ?> map = preferences.getAll();
-        if(map != null) {
-            for (Map.Entry<String, ?> entry : map.entrySet()) {
-                final Item book;
-                book = new Gson().
-                        fromJson(entry.getValue().toString(), Item.class);
-                books.add(book);
-            }
-            displayItems();
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
     }
 
     private void initRecyclerView() {
-        books = new ArrayList<>();
         adapter = new BookAdapter();
         adapter.setOnItemClickListener( new OnItemClickListener() {
             @Override
             public void onItemClick(Item book) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if(mainActivity != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable( Constants.ARG_TITLE, book);
-
-                    ListItemFragment listItemFragment = new ListItemFragment();
-                    listItemFragment.setArguments(bundle);
-
-                    mainActivity.setFragment(listItemFragment, true);
-                }
+                mPresenter.bookSelected(book);
             }
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void displayItems() {
+    @Override
+    public void displayFavoritesBooks(final List<Item> books) {
         adapter.setBooks(books);
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
 }
+

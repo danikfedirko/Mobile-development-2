@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 public interface BookAPI {
 
     @GET("/books/v1/volumes?q=java&key=AIzaSyAABGV92nf4smvVlVawsbLDiY-SyWSV1ek")
-    Call<Responce> getBooks();
+    Call<Responce> getData();
 
 }
