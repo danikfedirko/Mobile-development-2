@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">Google_Books_Application</string>
+    <string name="app_name">Google Books Application</string>
     <string name="no_data">No data</string>
+    <string name="successful_response">Success</string>
+    <string name="unsuccessful_response">Error</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favorites">Favorites</string>
+
 </resources>

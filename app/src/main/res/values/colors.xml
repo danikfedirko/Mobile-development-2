@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <drawable name="buttonPressed">#C0C0C0</drawable>
+    <drawable name="buttonSelected">#99CCFF</drawable>
+    <drawable name="buttonDefault">#FFFFFF</drawable>
+    <drawable name="focused">#C0C0C0</drawable>
 </resources>
