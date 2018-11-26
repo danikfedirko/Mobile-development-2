@@ -26,7 +26,7 @@ public class ListPresenter extends BasePresenter<BooksListContract.View>
     }
 
     @Override
-    public void characterSelected(Item book) {
+    public void bookSelected(Item book) {
         application.setCurrentBook(book);
         application.getFragmentNavigation().showBookDetailsFragment();
     }

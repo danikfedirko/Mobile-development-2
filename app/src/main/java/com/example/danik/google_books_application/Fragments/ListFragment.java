@@ -75,7 +75,7 @@ public class ListFragment extends Fragment implements BooksListContract.View {
         adapter.setOnItemClickListener( new OnItemClickListener() {
             @Override
             public void onItemClick(Item book) {
-                mPresenter.characterSelected(book);
+                mPresenter.bookSelected(book);
             }
         });
         recyclerView.setAdapter(adapter);

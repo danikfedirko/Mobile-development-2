@@ -12,7 +12,7 @@ public interface BooksListContract {
 
     interface Presenter {
         void loadData();
-        void characterSelected(Item book);
+        void bookSelected(Item book);
     }
 
     interface Model {
