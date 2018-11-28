@@ -35,6 +35,7 @@ public class DetailsModel implements BookDetailsContract.Model {
     }
 
     public boolean checkFavorite(Item book) {
-        return mPreferences.contains( book.getVolumeInfo().getTitle());
+        return mPreferences.contains(book.getVolumeInfo().getTitle());
     }
+
 }

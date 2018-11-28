@@ -1,7 +1,6 @@
 package com.example.danik.google_books_application.Fragments;
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +16,12 @@ import com.example.danik.google_books_application.Adapters.BookAdapter;
 import com.example.danik.google_books_application.Entities.Item;
 import com.example.danik.google_books_application.MVPInterfaces.BookDetailsContract;
 import com.example.danik.google_books_application.Presenter.BookDetailsPresenter;
+import com.example.danik.google_books_application.R;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.example.danik.google_books_application.R;
 
 public class ListItemFragment extends Fragment implements BookDetailsContract.View {
 
@@ -93,6 +92,11 @@ public class ListItemFragment extends Fragment implements BookDetailsContract.Vi
         bookTitle.setText(book.getVolumeInfo().getTitle());
         bookDescription.setText(book.getVolumeInfo().getDescription());
         Picasso.get().load(book.getVolumeInfo().getImageLinks().getThumbnail()).into(bookImage);
+        if(isFavorite) {
+            favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            favorite.setImageResource( R.drawable.ic_favorite_border_black_24dp);
+        }
     }
 
     private void initRecyclerView() {
