@@ -37,7 +37,6 @@ cache:
   - "$HOME/.android/build-cache"
 
 before_install:
-  - cd Google_Books_Application
   - chmod +x gradlew
   - yes | sdkmanager "cmake;3.6.4111459"
   - wget https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
@@ -67,7 +66,7 @@ deploy:
   overwrite: true
   api_key: ecee3b6d05c37e8faaa08185adcf67d14f08bb57
   file_glob: true
-  file: /home/travis/build/danikfedirko/Mobile-development-2/Google_Books_Application/app/build/outputs/apk/*
+  file: /home/travis/build/danikfedirko/Mobile-development-2/app/build/outputs/apk/*
   on:
     repo: danikfedirko/Mobile-development-2
     tags: true
