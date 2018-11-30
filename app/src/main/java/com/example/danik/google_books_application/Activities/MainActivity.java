@@ -10,15 +10,14 @@ import android.widget.FrameLayout;
 
 import com.example.danik.google_books_application.FragmentNavigation.FragmentNavigation;
 import com.example.danik.google_books_application.Fragments.FavoritesFragment;
+import com.example.danik.google_books_application.Fragments.ListFragment;
 import com.example.danik.google_books_application.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.example.danik.google_books_application.Fragments.ListFragment;
-
 public class MainActivity extends AppCompatActivity {
-    FragmentNavigation fragmentNavigation;
+    private FragmentNavigation fragmentNavigation;
 
     @BindView(R.id.fragment_container)
     protected FrameLayout frameLayout;

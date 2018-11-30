@@ -1,20 +1,13 @@
 package com.example.danik.google_books_application.Model;
 
 import android.content.SharedPreferences;
-import android.widget.ImageView;
 
 import com.example.danik.google_books_application.Entities.Item;
 import com.example.danik.google_books_application.MVPInterfaces.BookDetailsContract;
-import com.example.danik.google_books_application.R;
 import com.google.gson.Gson;
-
-import butterknife.BindView;
-
 
 public class DetailsModel implements BookDetailsContract.Model {
     private SharedPreferences mPreferences;
-    @BindView(R.id.favorite)
-    protected ImageView favorite;
 
     public DetailsModel(SharedPreferences preferences) {
         this.mPreferences = preferences;

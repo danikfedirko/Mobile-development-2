@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.danik.google_books_application.Constants;
-
 import com.example.danik.google_books_application.Entities.Item;
 import com.example.danik.google_books_application.FragmentNavigation.FragmentNavigation;
 import com.example.danik.google_books_application.Model.DetailsModel;
 import com.example.danik.google_books_application.Model.FavoritesModel;
-import com.example.danik.google_books_application.Model.ListModel;
 
 public class ApplicationEx extends Application {
     private Item currentBook;
@@ -19,7 +17,6 @@ public class ApplicationEx extends Application {
 
     private DetailsModel detailsModel;
     private FavoritesModel favoritesModel;
-    private ListModel listModel;
 
     public FragmentNavigation getFragmentNavigation() {
         return mFragmentNavigation;
@@ -45,10 +42,6 @@ public class ApplicationEx extends Application {
         return favoritesModel;
     }
 
-    public ListModel getListModel() {
-        return listModel;
-    }
-
     public SharedPreferences getSharedPreferences() {
         return preferences;
     }
@@ -61,6 +54,5 @@ public class ApplicationEx extends Application {
 
         detailsModel = new DetailsModel(getSharedPreferences());
         favoritesModel = new FavoritesModel(getSharedPreferences());
-        listModel = new ListModel();
     }
 }

@@ -8,7 +8,7 @@ import com.example.danik.google_books_application.Fragments.ListItemFragment;
 import com.example.danik.google_books_application.R;
 
 public class FragmentNavigation {
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
     public FragmentNavigation(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
